@@ -13,6 +13,9 @@ services:
 
   registry:
     build: registry
+    environment:
+      - PROXY_ADDRESS=${PROXY_ADDRESS}
+      - PROXY_PORT=${PROXY_PORT}
 
   web:
     build: web

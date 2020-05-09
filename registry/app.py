@@ -1,9 +1,14 @@
 import time
+import os
+import sys
 from flask import Flask, jsonify, request
 from selenium import webdriver
 from bs4 import BeautifulSoup
 from flask_cors import CORS, cross_origin
 
+PROXY_ADDRESS = os.environ.get('PROXY_ADDRESS', None)
+PROXY_PORT = os.environ.get('PROXY_PORT', None)
+PROXY = f"{PROXY_ADDRESS}:{PROXY_PORT}"
 
 options = webdriver.ChromeOptions()
 options.add_argument('--ignore-certificate-errors')
@@ -11,6 +16,9 @@ options.add_argument("--test-type")
 options.add_argument('--headless')
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
+if PROXY_ADDRESS and PROXY_PORT:
+    print(f"proxy is set to {PROXY}", file=sys.stderr)
+    options.add_argument(f'--proxy-server={PROXY}')
 driver = webdriver.Chrome(options=options)
 
 def get_registry_info(lat, lng, zoom=10):
@@ -18,8 +26,10 @@ def get_registry_info(lat, lng, zoom=10):
         return None 
     url = f"https://pkk.rosreestr.ru/#/search/{lat},{lng}/{zoom}/@qih8n8v9?text={lat}%20{lng}"
     driver.get(url)
-    time.sleep(1)
+    time.sleep(0.25)
     html = driver.page_source
+    print("Recieved html:")
+    print(html, file=sys.stderr)
     soup = BeautifulSoup(html, 'html.parser')
     #print(soup)
     info_body = soup.find('div', {'class' : 'detail-info-body'})
