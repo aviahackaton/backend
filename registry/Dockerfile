@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM joyzoursky/python-chromedriver
 MAINTAINER S.Guliaev <semen.guliaev@gmail.com>
 
 EXPOSE 5000
