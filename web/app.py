@@ -14,6 +14,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 def polygons():
     res = [
         {
+            "id": "Кадастровый номер1",
             "name": "United States",
             "coordinates": [
             {
@@ -36,6 +37,7 @@ def polygons():
             "type": "red"
         },
         {
+            "id": "Кадастровый номер2",
             "name": "Green",
             "coordinates": [
             {
@@ -65,6 +67,128 @@ def polygons():
 
     return jsonify(res)
 
+
+@cross_origin
+@app.route('/api/v1/upload')
+def upload():
+    return 'success', 200
+
+@cross_origin
+@app.route('/api/v1/reports')
+def get_reports():
+    polygon1 = {
+        "id": "Кадастровый номер1",
+        "name": "United States",
+        "coordinates": [
+        {
+            "lat": 55.80166847150037,
+            "lon": 37.75216549902341
+        },
+        {
+            "lat": 55.80862947567413,
+            "lon": 37.87713498144529
+        },
+        {
+            "lat": 55.731989658541536,
+            "lon": 37.92382687597654
+        },
+        {
+            "lat": 55.70951094778051,
+            "lon": 37.74529904394527
+        }
+        ],
+        "type": "red"
+    }
+
+    report1 = {
+        "area": polygon1,
+        "coords": [55.80862947567413, 37.87713498144529],
+        "sqaure": 4,
+        "areaPurpose": "Тип использования",
+        "type": "Тип участка",
+        "district": "Кадастровый номер квартала",
+        "id": "Кадастровый номер1",
+    }
+    polygon2 = {
+        "id": "Кадастровый номер2",
+        "name": "Green",
+        "coordinates": [
+        {
+            "lat": 55.77613409402249,
+            "lon": 37.34979123144528
+        },
+        {
+            "lat": 55.7784560956789,
+            "lon": 37.411589327148405
+        },
+        {
+            "lat": 55.725789932653754,
+            "lon": 37.441801729492155
+        },
+        {
+            "lat": 55.6955521084172,
+            "lon": 37.35391110449215
+        },
+        {
+            "lat": 55.75213194030574,
+            "lon": 37.23718136816404
+        }
+        ],
+        "type": "green"
+    }
+
+    report2 = {
+        "area": polygon2,
+        "coords": [55.75213194030574, 37.23718136816404],
+        "sqaure": 10,
+        "areaPurpose": "Тип использования",
+        "type": "Тип участка",
+        "district": "Кадастровый номер квартала",
+        "id": "Кадастровый номер2",
+    }
+    res = [
+        report1,
+        report2,
+    ]
+    return jsonify(res)
+
+@cross_origin
+@app.route('/api/v1/reports/<id>')
+def get_report(id):
+    polygon = {
+        "id": "Кадастровый номер1",
+        "name": "United States",
+        "coordinates": [
+        {
+            "lat": 55.80166847150037,
+            "lon": 37.75216549902341
+        },
+        {
+            "lat": 55.80862947567413,
+            "lon": 37.87713498144529
+        },
+        {
+            "lat": 55.731989658541536,
+            "lon": 37.92382687597654
+        },
+        {
+            "lat": 55.70951094778051,
+            "lon": 37.74529904394527
+        }
+        ],
+        "type": "red"
+    }
+
+    res = {
+        "area": polygon,
+        "coords": [55.80862947567413, 37.87713498144529],
+        "sqaure": 4,
+        "areaPurpose": "Тип использования",
+        "type": "Тип участка",
+        "district": "Кадастровый номер квартала",
+        "id": "Кадастровый номер1",
+    }
+    return jsonify(res)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
