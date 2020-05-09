@@ -16,7 +16,7 @@ driver = webdriver.Chrome(options=options)
 def get_registry_info(lat, lng, zoom=10):
     if lat is None or lng is None:
         return None 
-    url = f"https://pkk.rosreestr.ru/#/search/{lat},{lng}/{zoom}/@qih8n8v9?text={lat}%20{lng}&type=1&inPoint=true&opened=77%3A1%3A1001%3A1484"
+    url = f"https://pkk.rosreestr.ru/#/search/{lat},{lng}/{zoom}/@qih8n8v9?text={lat}%20{lng}"
     driver.get(url)
     time.sleep(1)
     html = driver.page_source
