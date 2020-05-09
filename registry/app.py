@@ -5,6 +5,8 @@ from flask import Flask, jsonify, request
 from selenium import webdriver
 from bs4 import BeautifulSoup
 from flask_cors import CORS, cross_origin
+from rosreestr2coord import Area
+
 
 PROXY_ADDRESS = os.environ.get('PROXY_ADDRESS', None)
 PROXY_PORT = os.environ.get('PROXY_PORT', None)
@@ -56,6 +58,13 @@ def buildings():
     lat = request.args.get('lat', None)
     lng = request.args.get('lng', None)
     return jsonify(get_registry_info(lat, lng))
+
+@cross_origin()
+@app.route('/registry/v1/geometry/<code>', methods=['GET'])
+def geometry(code):
+    print(code, file=sys.stderr)
+    area = Area(code, with_proxy=True)
+    return jsonify(area.get_coord())
 
 
 if __name__ == '__main__':
