@@ -81,13 +81,13 @@ def get_reports():
     report1 = {
         "date": int(time.time()),
         "name": "United States",
-        "id": "Кадастровый номер1",
+        "id": 1,
     }
 
     report2 = {
         "date": int(time.time()),
         "name": "Green",
-        "id": "Кадастровый номер2",
+        "id": 2,
     }
     res = [
         report1,
@@ -99,7 +99,7 @@ def get_reports():
 @app.route('/api/v1/reports/<id>/')
 def get_report(id):
     polygon = {
-        "id": "Кадастровый номер1",
+        "id": 1,
         "name": "United States",
         "coordinates": [
         {
@@ -129,7 +129,8 @@ def get_report(id):
         "areaPurpose": "Тип использования",
         "type": "Тип участка",
         "district": "Кадастровый номер квартала",
-        "id": "Кадастровый номер1",
+        "id": 1,
+        "number": "Кадастровый номер",
     }
     return jsonify(res)
 
