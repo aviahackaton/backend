@@ -27,7 +27,7 @@ def polygons():
             "type": "red"
         },
                 {
-            "name": "United States",
+            "name": "poly2",
             "coordinates": [
             {
                 "lat": 55.849678,
@@ -45,7 +45,7 @@ def polygons():
             "type": "red"
         },
                 {
-            "name": "United States",
+            "name": "Green",
             "coordinates": [
             {
                 "lat": 55.819678,
