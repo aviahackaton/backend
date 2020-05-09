@@ -100,6 +100,7 @@ def get_reports():
 def get_report(id):
     polygon = {
         "id": 1,
+        "date": int(time.time()),
         "name": "United States",
         "coordinates": [
         {
