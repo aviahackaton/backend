@@ -8,10 +8,11 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['JSON_AS_ASCII'] = False
 app.config['CORS_HEADERS'] = 'Content-Type'
+app.url_map.strict_slashes = False
 
 
 @cross_origin
-@app.route('/api/v1/poly', methods=['GET'])
+@app.route('/api/v1/poly/', methods=['GET'])
 def polygons():
     res = [
         {
@@ -70,12 +71,12 @@ def polygons():
 
 
 @cross_origin
-@app.route('/api/v1/upload')
+@app.route('/api/v1/upload/')
 def upload():
     return 'success', 200
 
 @cross_origin
-@app.route('/api/v1/reports')
+@app.route('/api/v1/reports/')
 def get_reports():
     report1 = {
         "date": datetime.datetime.today(),
@@ -95,7 +96,7 @@ def get_reports():
     return jsonify(res)
 
 @cross_origin
-@app.route('/api/v1/reports/<id>')
+@app.route('/api/v1/reports/<id>/')
 def get_report(id):
     polygon = {
         "id": "Кадастровый номер1",
