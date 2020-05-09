@@ -1,4 +1,4 @@
-import datetime
+import time
 from flask import Flask, jsonify
 from flask_cors import CORS, cross_origin
 
@@ -79,13 +79,13 @@ def upload():
 @app.route('/api/v1/reports/')
 def get_reports():
     report1 = {
-        "date": datetime.datetime.today(),
+        "date": time.time(),
         "name": "United States",
         "id": "Кадастровый номер1",
     }
 
     report2 = {
-        "date": datetime.datetime.today(),
+        "date": time.time(),
         "name": "Green",
         "id": "Кадастровый номер2",
     }
