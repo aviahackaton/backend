@@ -2,6 +2,8 @@ import time
 from flask import Flask, jsonify, request
 from selenium import webdriver
 from bs4 import BeautifulSoup
+from flask_cors import CORS, cross_origin
+
 
 options = webdriver.ChromeOptions()
 options.add_argument('--ignore-certificate-errors')
@@ -10,7 +12,6 @@ options.add_argument('--headless')
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
 driver = webdriver.Chrome(options=options)
-#
 
 def get_registry_info(lat, lng, zoom=10):
     if lat is None or lng is None:
@@ -34,9 +35,12 @@ def get_registry_info(lat, lng, zoom=10):
     return result
 
 app = Flask(__name__)
+cors = CORS(app)
 app.config['JSON_AS_ASCII'] = False
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 
+@cross_origin()
 @app.route('/registry/v1/buildings', methods=['GET'])
 def buildings():
     lat = request.args.get('lat', None)

@@ -1,10 +1,15 @@
 from flask import Flask, jsonify
+from flask_cors import CORS, cross_origin
 
 
 app = Flask(__name__)
+app = Flask(__name__)
+cors = CORS(app)
 app.config['JSON_AS_ASCII'] = False
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 
+@cross_origin
 @app.route('/api/v1/poly', methods=['GET'])
 def polygons():
 
