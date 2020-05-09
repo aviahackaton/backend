@@ -79,13 +79,13 @@ def upload():
 @app.route('/api/v1/reports/')
 def get_reports():
     report1 = {
-        "date": time.time(),
+        "date": int(time.time()),
         "name": "United States",
         "id": "Кадастровый номер1",
     }
 
     report2 = {
-        "date": time.time(),
+        "date": int(time.time()),
         "name": "Green",
         "id": "Кадастровый номер2",
     }
