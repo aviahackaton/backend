@@ -83,29 +83,31 @@ def initialize():
             "type": "green"
         },
     ]
+
     report1 = {
-        "coords": [55.80862947567413, 37.87713498144529],
-        "square": 4,
-        "areaPurpose": "Тип использования",
-        "type": "Тип участка",
-        "district": "Кадастровый номер квартала",
-        "id": 0,
-        "number": "Кадастровый номер1",
+        "coords": [55.75213194030574, 37.23718136816404],
+        "square": "6 748 кв. м",
+        "areaPurpose": "Для дачного строительства",
+        "type": "Объект недвижимости",
+        "district": "50:07:0090210",
+        "id": 2,
+        "number": "50:07:0090210:476",
         "date": int(time.time()),
-        "name": "United States",
+        "name": "Московская область, Волоколамский район, с/п Осташевское, район д. Титово",
+    }
+    
+    report2 = {
+        "coords": [55.833964615925815, 35.807070509927144],
+        "square": "69 988 кв. м",
+        "areaPurpose": "Для общего пользования (уличная сеть)",
+        "type": "Объект недвижимости",
+        "district": "77:01:0001001",
+        "id": 1,
+        "number": "77:01:0001001:1484",
+        "date": int(time.time()),
+        "name": "г. Москва, Кремль, Большой сквер, Тайницкий сад",
     }
 
-    report2 = {
-        "coords": [55.75213194030574, 37.23718136816404],
-        "square": 12,
-        "areaPurpose": "Тип использования",
-        "type": "Тип участка",
-        "district": "Кадастровый номер квартала",
-        "id": 1,
-        "number": "Кадастровый номер2",
-        "date": int(time.time()),
-        "name": "Green",
-    }
     cursor.execute('INSERT INTO reports (id, data) VALUES (%s, %s)', [report1['id'], json.dumps(report1),])
     cursor.execute('INSERT INTO reports (id, data) VALUES (%s, %s)', [report2['id'], json.dumps(report2),])
     cursor.execute('INSERT INTO polygons (id, data) VALUES (%s, %s)', [polys[0]['id'], json.dumps(polys[0]),])
