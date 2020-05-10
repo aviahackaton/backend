@@ -16,7 +16,9 @@ conn = psycopg2.connect(dbname=DATABASE_NAME,
                         host=DATABASE_HOST,
                         port=5432)
 cursor = conn.cursor()
-
+cursor.execute('CREATE TABLE IF NOT EXISTS reports (id serial PRIMARY KEY, data TEXT);')
+cursor.execute('CREATE TABLE IF NOT EXISTS polygons (id serial PRIMARY KEY, data TEXT);')
+conn.commit()
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = '/tmp/upload'
@@ -26,13 +28,9 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 app.url_map.strict_slashes = False
 
 
-
 @cross_origin
 @app.route('/api/v1/initialize/', methods=['GET'])
 def initialize():
-    if 'reports_num' not in reports_db:
-        with reports_db.transaction():
-            reports_db['reports_num'] = 0
     polys = [
         {
             "id": 0,
@@ -108,21 +106,21 @@ def initialize():
         "date": int(time.time()),
         "name": "Green",
     }
-    with reports_db.transaction():
-        reports_db[0] = json.dumps(report1)
-        reports_db[1] = json.dumps(report2)
-        reports_db.incr_by('reports_num', 2)
-    with polygons_db.transaction():
-        polygons_db[0] = json.dumps(polys[0])
-        polygons_db[1] = json.dumps(polys[1])
+    cursor.execute('INSERT INTO reports (id, data) VALUES (%s, %s)', [report1['id'], json.dumps(report1),])
+    cursor.execute('INSERT INTO reports (id, data) VALUES (%s, %s)', [report2['id'], json.dumps(report2),])
+    cursor.execute('INSERT INTO polygons (id, data) VALUES (%s, %s)', [polys[0]['id'], json.dumps(polys[0]),])
+    cursor.execute('INSERT INTO polygons (id, data) VALUES (%s, %s)', [polys[1]['id'], json.dumps(polys[1]),])
+    conn.commit()
     return 'Success', 200
 
 @cross_origin
 @app.route('/api/v1/poly/', methods=['GET'])
 def polygons():
     res = []
-    for i in range(int(reports_db['reports_num'])):
-        polygon = json.loads(polygons_db[i])
+    cursor.execute('SELECT * FROM polygons ORDER BY id')
+    polygons = cursor.fetchall()
+    for row in polygons:
+        polygon = json.loads(row[1])
         res.append(polygon)
     return jsonify(res)
 
@@ -136,16 +134,16 @@ def upload():
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
         # work on the ... file
-        #reports_db.incr('reports_num')
-        #reports_db.commit()
     return 'Success', 200
 
 @cross_origin
 @app.route('/api/v1/reports/')
 def get_reports():
     res = []
-    for i in range(int(reports_db['reports_num'])):
-        report = json.loads(reports_db[i])
+    cursor.execute('SELECT * FROM reports ORDER BY id')
+    reports = cursor.fetchall()
+    for row in reports:
+        report = json.loads(row[1])
         res.append({
             'id' : report['id'],
             'date' : report['date'],
@@ -156,13 +154,18 @@ def get_reports():
 @cross_origin
 @app.route('/api/v1/reports/<id>/')
 def get_report(id):
-    try:
-        report = json.loads(reports_db[id])
-    except KeyError:
+    id = int(id)
+    cursor.execute(f'SELECT * FROM reports WHERE id={id}')
+    row = cursor.fetchone()
+    if row is None:
         return jsonify(None)
-    polygon = json.loads(polygons_db[id])
-    if report is not None:
-        report['area'] = polygon
+    cursor.execute(f'SELECT * FROM polygons WHERE id={id}')
+    poly = cursor.fetchone()
+    report = json.loads(row[1])
+    if poly is not None:
+        polygon = json.loads(poly[1])
+    else: polygon = None
+    report['area'] = polygon
     return jsonify(report)
 
 
