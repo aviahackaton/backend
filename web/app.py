@@ -1,8 +1,21 @@
 import time
 import json
 import psycopg2
+import os
 from flask import Flask, jsonify
 from flask_cors import CORS, cross_origin
+
+DATABASE_HOST=os.environ.get('DB_HOST')
+DATABASE_NAME=os.environ.get('DB_DATABASE')
+DATABASE_USER=os.environ.get('DB_USER')
+DATABASE_PASSWORD=os.environ.get('DB_PASSWORD')
+
+conn = psycopg2.connect(dbname=DATABASE_NAME,
+                        user=DATABASE_USER,
+                        password=DATABASE_PASSWORD,
+                        host=DATABASE_HOST,
+                        port=5432)
+cursor = conn.cursor()
 
 
 app = Flask(__name__)
@@ -11,6 +24,8 @@ cors = CORS(app)
 app.config['JSON_AS_ASCII'] = False
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.url_map.strict_slashes = False
+
+
 
 @cross_origin
 @app.route('/api/v1/initialize/', methods=['GET'])
@@ -160,7 +175,7 @@ def mockup_result():
     for key, value in res.items():
         poly = {
             "id": 1,
-            "name": "Green",
+            "name": key,
             "type": "red",
             'coordinates' : [
                 {
